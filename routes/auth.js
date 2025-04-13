@@ -7,35 +7,39 @@ const db = require('../db/db');
 
 const router = express.Router();
 
-
 // LOGIN
-router.post('/login', (req, res) => {
-  console.log('📩 Intento de login:', req.body);
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  console.log('📩 Intento de login:', { email, password });
 
-  const { email, contraseña } = req.body;
+  try {
+    const [results] = await db.query('SELECT * FROM usuarios WHERE email = ?', [email]);
 
-  db.query('SELECT * FROM usuarios WHERE email = ?', [email], async (err, results) => {
-    console.log('🔎 Usuario encontrado:', results);
-
-    if (err) return res.status(500).json({ error: 'Error en el servidor' });
-    if (results.length === 0) return res.status(401).json({ error: 'Email no registrado' });
+    if (results.length === 0) {
+      console.log('🔎 Usuario no encontrado:', email);
+      return res.status(401).json({ error: 'Email no registrado' });
+    }
 
     const usuario = results[0];
-    const coincide = await bcrypt.compare(contraseña, usuario.contraseña);
+    console.log('🛠️ Usuario encontrado:', usuario.email);
+
+    const coincide = await bcrypt.compare(password, usuario.password);
+    console.log('🛠️ Resultado bcrypt.compare:', coincide);
 
     if (!coincide) {
+      console.log('🔒 Contraseña incorrecta para:', usuario.email);
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-        // Verifica si está activo y no bloqueado
     if (!usuario.activo) {
+      console.log('⛔ Usuario inactivo:', usuario.email);
       return res.status(403).json({ error: 'Usuario inactivo' });
     }
 
     if (usuario.bloqueado) {
+      console.log('⛔ Usuario bloqueado:', usuario.email);
       return res.status(403).json({ error: 'Usuario bloqueado' });
     }
-
 
     // Guardar usuario en sesión
     req.session.usuario = {
@@ -47,16 +51,24 @@ router.post('/login', (req, res) => {
     };
 
     // Actualizar último login
-db.query('UPDATE usuarios SET ultimo_login = NOW() WHERE id = ?', [usuario.id]);
+    await db.query('UPDATE usuarios SET ultimo_login = NOW() WHERE id = ?', [usuario.id]);
 
-
+    console.log('✅ Login exitoso:', usuario.email);
     res.json({ mensaje: 'Login exitoso', usuario: req.session.usuario });
-  });
+
+  } catch (error) {
+    console.error('❌ Error en login:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
 });
 
 // LOGOUT
 router.post('/logout', (req, res) => {
-  req.session.destroy(() => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('❌ Error cerrando sesión:', err);
+      return res.status(500).json({ error: 'Error cerrando sesión' });
+    }
     res.json({ mensaje: 'Sesión cerrada' });
   });
 });
