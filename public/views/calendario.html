@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>📅 Calendario</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📅 Agenda y Calendario</h1>
+
+    <!-- Botón para crear evento nuevo -->
+    <button id="btn-nuevo-evento" class="boton-flotante">
+      <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- Contenedor del calendario -->
+    <div id="calendario" style="margin-top: 2rem;"></div>
+
+    <!-- Modal para crear/editar eventos -->
+    <div id="modal-evento" class="modal oculto">
+      <div class="modal-contenido">
+        <span id="cerrar-modal-evento" class="cerrar">&times;</span>
+        <h2 id="modal-titulo">Nuevo Evento</h2>
+        <form id="form-evento">
+          <input type="text" id="titulo" placeholder="Título del evento" required>
+          
+          <textarea id="descripcion" placeholder="Descripción (opcional)"></textarea>
+        
+          <div class="fechas">
+            <input type="datetime-local" id="fecha_inicio" required>
+            <input type="datetime-local" id="fecha_fin">
+          </div>
+        
+          <select id="tipo_etiqueta">
+            <option value="">Sin etiqueta</option>
+            <option value="entrega">Entrega</option>
+            <option value="montaje">Montaje</option>
+            <option value="vacaciones">Vacaciones</option>
+            <option value="viaje">Viaje</option>
+          </select>
+        
+          <input type="color" id="color" value="#2196f3">
+        
+          <div class="acciones">
+            <button type="submit">Guardar</button>
+            <button type="button" id="btn-eliminar-evento">Eliminar Evento</button>
+          </div>
+        </form>
+        
+        
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Script principal (MÓDULO) después -->
+  <script type="module" src="/js/calendario.js"></script>
+
+</body>
+</html>

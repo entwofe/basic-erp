@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ficha del Artículo</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1 id="titulo-articulo">📦 Artículo</h1>
+
+    <div class="ficha">
+      <div class="ficha-izquierda">
+        <img id="foto-articulo" src="/imagenes/almacen/articulo_default.png" alt="Imagen del artículo" />
+        <div id="qr-articulo"></div>
+      </div>
+
+      <div class="ficha-derecha">
+        <p><strong>Nombre:</strong> <span id="nombre"></span></p>
+        <p><strong>Tipo:</strong> <span id="tipo"></span></p>
+        <p><strong>Unidad:</strong> <span id="unidad"></span></p>
+        <p><strong>Stock actual:</strong> <span id="stock"></span></p>
+        <p><strong>Stock mínimo:</strong> <span id="stock_minimo"></span></p>
+        <p><strong>Ubicación:</strong> <span id="ubicacion"></span></p>
+        <p><strong>Proveedor habitual:</strong> <span id="proveedor"></span></p>
+        <p><strong>Precio de coste:</strong> <span id="precio_coste"></span></p>
+        <p><strong>Desperdicio:</strong> <span id="desperdicio"></span>%</p>
+        <p><strong>Última compra:</strong> <span id="ultima_compra"></span></p>
+        <p><strong>Descripción:</strong></p>
+        <p id="descripcion"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
+  
+</body>
+</html>

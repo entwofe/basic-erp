@@ -1,0 +1,60 @@
+<div class="container">
+    <h1>📦 Almacén</h1>
+  
+    <div class="barra-superior">
+      <div class="filtros">
+        <select id="filtro-tipo">
+          <option value="">Todos los tipos</option>
+          <option value="perfil">Perfil</option>
+          <option value="led">Led</option>
+          <option value="fuente">Fuente</option>
+          <option value="otro">Otro</option>
+        </select>
+  
+        <input type="text" id="busqueda" placeholder="Buscar artículo..." />
+      </div>
+  
+      <button id="btn-nuevo-articulo" class="boton-flotante">+</button>
+    </div>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Tipo</th>
+          <th>Unidad</th>
+          <th>Stock</th>
+          <th>Precio</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-articulos"></tbody>
+    </table>
+    <div id="paginacion" class="paginacion"></div>
+
+  </div>
+  
+  <!-- Modal -->
+  <div id="modal-articulo" class="modal oculto">
+    <div class="modal-contenido">
+      <span id="cerrar-modal-articulo" class="cerrar">&times;</span>
+      <h2 id="titulo-modal-articulo">Nuevo Artículo</h2>
+      <form id="form-articulo">
+        <input type="hidden" id="id-articulo" />
+        <input type="text" id="nombre" placeholder="Nombre" required />
+        <select id="tipo">
+          <option value="perfil">Perfil</option>
+          <option value="led">Led</option>
+          <option value="fuente">Fuente</option>
+          <option value="otro">Otro</option>
+        </select>
+        <input type="text" id="unidad" placeholder="Unidad (m, ud, etc.)" required />
+        <input type="number" id="stock" placeholder="Stock actual" step="0.01" />
+        <input type="number" id="stock_minimo" placeholder="Stock mínimo" step="0.01" />
+        <input type="text" id="ubicacion" placeholder="Ubicación (opcional)" />
+        <input type="text" id="proveedor" placeholder="Proveedor (opcional)" />
+        <button type="submit">Guardar</button>
+      </form>
+    </div>
+  </div>
+  

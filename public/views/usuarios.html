@@ -1,0 +1,40 @@
+<div class="container">
+    <h1>👥 Gestión de Usuarios</h1>
+  
+    <button id="btn-nuevo-usuario">+ Nuevo usuario</button>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-usuarios"></tbody>
+    </table>
+  </div>
+  
+  <!-- Modal -->
+  <div id="modal-usuario" class="modal oculto">
+    <div class="modal-contenido">
+      <span id="cerrar-modal-usuario" class="cerrar">&times;</span>
+      <h2>Nuevo Usuario</h2>
+      <form id="form-usuario">
+        <input type="text" id="nombre" placeholder="Nombre" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="contraseña" placeholder="Contraseña" required />
+        <select id="rol">
+          <option value="admin">Admin</option>
+          <option value="produccion">Producción</option>
+          <option value="almacen">Almacén</option>
+          <option value="ventas">Ventas</option>
+          <option value="compras">Compras</option>
+          <option value="personal">Personal</option>
+        </select>
+        <button type="submit">Crear</button>
+      </form>
+    </div>
+  </div>
+  

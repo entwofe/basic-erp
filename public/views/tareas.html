@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gestión de Tareas</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>📋 Lista de Tareas</h1>
+
+    <div class="barra-superior">
+      <div class="filtros">
+        <select id="filtro">
+          <option value="todas">Todas</option>
+          <option value="completadas">Completadas</option>
+          <option value="pendientes">Pendientes</option>
+        </select>
+
+        <input type="text" id="busqueda" placeholder="Buscar tareas...">
+      </div>
+    </div>
+
+    <table id="tabla-tareas">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Descripción</th>
+          <th>Completado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <p id="contador">Mostrando 0 tareas</p>
+    <div id="paginacion"></div>
+
+    <!-- Botón flotante para crear tarea -->
+    <button id="btn-nueva-tarea" class="boton-flotante">
+      <i class="fas fa-plus"></i>
+    </button>
+
+    <!-- MODAL -->
+    <div id="modal" class="modal oculto">
+      <div class="modal-contenido">
+        <span id="cerrar-modal" class="cerrar">&times;</span>
+        <h2 id="modal-titulo">Nueva Tarea</h2>
+        <form id="form-tarea">
+          <input type="text" id="titulo" placeholder="Título" required />
+          <input type="text" id="descripcion" placeholder="Descripción" required />
+          <button type="submit">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+</html>
