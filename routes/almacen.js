@@ -14,7 +14,7 @@ const router = express.Router();
 router.get('/', tienePermiso('almacen', 'leer'), async (req, res) => {
   try {
     const [articulos] = await db.query(`
-      SELECT id, nombre, tipo, unidad, stock, precio
+      SELECT id, nombre, tipo, unidad, stock, precio_coste
       FROM articulos
       ORDER BY nombre ASC
     `);

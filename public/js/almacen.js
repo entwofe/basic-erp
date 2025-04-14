@@ -46,7 +46,7 @@ window.inicializarModuloAlmacen = () => {
         <td>${a.tipo}</td>
         <td>${a.unidad}</td>
         <td>${a.stock}</td>
-        <td>${a.precio || ''}</td>
+        <td>${a.precio_coste || ''}</td>
         <td>
           <button class="btn-editar" data-id="${a.id}">✏️</button>
           <button class="btn-eliminar" data-id="${a.id}">🗑️</button>
