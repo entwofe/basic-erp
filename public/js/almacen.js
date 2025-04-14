@@ -2,7 +2,7 @@
 
 console.log('🔧 inicializarModuloAlmacen cargado');
 
-import { socket } from './socket.js'; // <--- Importar el socket (te paso ahora socket.js)
+import { socket } from './socket.js';
 
 window.inicializarModuloAlmacen = () => {
   // --- Elementos del DOM ---
@@ -21,7 +21,6 @@ window.inicializarModuloAlmacen = () => {
 
   btnNuevo.addEventListener('click', () => {
     form.reset();
-    document.getElementById('id-articulo').value = '';
     document.getElementById('titulo-modal-articulo').textContent = 'Nuevo Artículo';
     modal.classList.remove('oculto');
     modal.style.display = 'flex';
@@ -32,9 +31,13 @@ window.inicializarModuloAlmacen = () => {
   });
 
   const cargarArticulos = async () => {
-    const res = await fetch('/api/almacen');
-    articulosOriginales = await res.json();
-    aplicarFiltrosYBusqueda();
+    try {
+      const res = await fetch('/api/almacen');
+      articulosOriginales = await res.json();
+      aplicarFiltrosYBusqueda();
+    } catch (error) {
+      console.error('❌ Error al cargar artículos:', error);
+    }
   };
 
   const mostrarArticulos = (articulos) => {
@@ -46,7 +49,7 @@ window.inicializarModuloAlmacen = () => {
         <td>${a.tipo}</td>
         <td>${a.unidad}</td>
         <td>${a.stock}</td>
-        <td>${a.precio_coste || ''}</td>
+        <td>${a.precio || ''}</td>
         <td>
           <button class="btn-editar" data-id="${a.id}">✏️</button>
           <button class="btn-eliminar" data-id="${a.id}">🗑️</button>
@@ -55,7 +58,6 @@ window.inicializarModuloAlmacen = () => {
       fila.style.cursor = 'pointer';
       fila.addEventListener('mouseenter', () => fila.style.backgroundColor = '#f0f9ff');
       fila.addEventListener('mouseleave', () => fila.style.backgroundColor = '');
-  
       fila.addEventListener('dblclick', () => {
         const id = a.id;
         const modulo = `fichaArticulo-${id}`;
@@ -67,11 +69,9 @@ window.inicializarModuloAlmacen = () => {
           params: { id }
         });
       });
-  
       tabla.appendChild(fila);
     });
   };
-  
 
   const configurarEventosAcciones = (articulos) => {
     document.querySelectorAll('.btn-editar').forEach(boton => {
@@ -81,17 +81,15 @@ window.inicializarModuloAlmacen = () => {
         if (!articulo) return;
 
         form.reset();
-        document.getElementById('id-articulo').value = articulo.id;
         document.getElementById('nombre').value = articulo.nombre;
         document.getElementById('tipo').value = articulo.tipo;
         document.getElementById('unidad').value = articulo.unidad;
         document.getElementById('stock').value = articulo.stock;
-        document.getElementById('stock_minimo').value = articulo.stock_minimo;
+        document.getElementById('stock_minimo').value = articulo.stock_minimo || '';
         document.getElementById('ubicacion').value = articulo.ubicacion || '';
         document.getElementById('proveedor').value = articulo.proveedor || '';
         document.getElementById('titulo-modal-articulo').textContent = 'Editar Artículo';
 
-        modal.classList.remove('oculto');
         modal.style.display = 'flex';
       });
     });
@@ -101,6 +99,7 @@ window.inicializarModuloAlmacen = () => {
         const id = boton.dataset.id;
         const eliminar = async () => {
           await fetch(`/api/almacen/${id}`, { method: 'DELETE' });
+          socket.emit('almacenActualizado');
         };
         mostrarConfirmacion('¿Eliminar este artículo?', eliminar, { texto: 'Eliminar', color: 'crimson' });
       });
@@ -117,13 +116,12 @@ window.inicializarModuloAlmacen = () => {
     const filtrados = articulosOriginales.filter(a => {
       const nombre = (a.nombre || '').toLowerCase();
       const tipoArticulo = (a.tipo || '').toLowerCase();
-      
+
       const coincideTipo = !tipo || tipoArticulo === tipo;
       const coincideTexto = nombre.includes(texto);
-    
+
       return coincideTipo && coincideTexto;
     });
-    
 
     paginaActual = 1;
     mostrarPaginados(filtrados);
@@ -169,9 +167,8 @@ window.inicializarModuloAlmacen = () => {
       proveedor: document.getElementById('proveedor').value,
     };
 
-    const id = document.getElementById('id-articulo').value;
-    const metodo = id ? 'PUT' : 'POST';
-    const url = id ? `/api/almacen/${id}` : '/api/almacen';
+    const metodo = 'POST';
+    const url = '/api/almacen';
 
     const res = await fetch(url, {
       method: metodo,
@@ -182,6 +179,7 @@ window.inicializarModuloAlmacen = () => {
     if (res.ok) {
       modal.style.display = 'none';
       form.reset();
+      socket.emit('almacenActualizado');
     } else {
       alert('Error al guardar el artículo');
     }
@@ -191,22 +189,16 @@ window.inicializarModuloAlmacen = () => {
   filtroTipo.addEventListener('change', aplicarFiltrosYBusqueda);
   inputBusqueda.addEventListener('input', aplicarFiltrosYBusqueda);
 
-  // --- Escuchar cambios en tiempo real ---
-  socket.on('almacenActualizado', () => {
-    console.log('🔄 Actualizando lista de artículos (socket.io)');
-    cargarArticulos();
-  });
-
-  filtroTipo.value = localStorage.getItem('almacen_filtro') || '';
-  inputBusqueda.value = localStorage.getItem('almacen_busqueda') || '';
-  cargarArticulos();
-  
+  // --- SOCKET.IO actualizaciones ---
   if (typeof socket !== 'undefined') {
     socket.on('almacenActualizado', () => {
       console.log('🔄 Actualizando lista de artículos por evento en tiempo real');
       cargarArticulos();
     });
   }
-  
-  
+
+  filtroTipo.value = localStorage.getItem('almacen_filtro') || '';
+  inputBusqueda.value = localStorage.getItem('almacen_busqueda') || '';
+
+  cargarArticulos();
 };

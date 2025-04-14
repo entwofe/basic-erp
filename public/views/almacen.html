@@ -33,29 +33,61 @@
     <div id="paginacion" class="paginacion"></div>
 
   </div>
-  
-  <!-- Modal -->
-  <div id="modal-articulo" class="modal oculto">
-    <div class="modal-contenido">
-      <span id="cerrar-modal-articulo" class="cerrar">&times;</span>
+
+<!-- Modal para Nuevo Artículo -->
+<div id="modal-articulo" class="modal oculto">
+  <div class="modal-contenido">
+    <div class="modal-header">
       <h2 id="titulo-modal-articulo">Nuevo Artículo</h2>
-      <form id="form-articulo">
-        <input type="hidden" id="id-articulo" />
-        <input type="text" id="nombre" placeholder="Nombre" required />
-        <select id="tipo">
-          <option value="">Todos los tipos</option>
-          <option value="eléctrico">Eléctrico</option>
-          <option value="iluminación">Iluminación</option>
-          <option value="electrónica">Electrónica</option>
-          <option value="materiales">Materiales</option>
-        </select>
-        <input type="text" id="unidad" placeholder="Unidad (m, ud, etc.)" required />
-        <input type="number" id="stock" placeholder="Stock actual" step="0.01" />
-        <input type="number" id="stock_minimo" placeholder="Stock mínimo" step="0.01" />
-        <input type="text" id="ubicacion" placeholder="Ubicación (opcional)" />
-        <input type="text" id="proveedor" placeholder="Proveedor (opcional)" />
-        <button type="submit">Guardar</button>
-      </form>
+      <span id="cerrar-modal-articulo" class="cerrar">&times;</span>
     </div>
+
+    <form id="form-articulo" class="formulario-modal">
+      <div class="form-grupo">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" required>
+      </div>
+
+      <div class="form-grupo">
+        <label for="tipo">Tipo</label>
+        <select id="tipo">
+          <option value="">Seleccionar tipo</option>
+          <option value="perfil">Perfil</option>
+          <option value="led">Led</option>
+          <option value="fuente">Fuente</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+
+      <div class="form-grupo">
+        <label for="unidad">Unidad</label>
+        <input type="text" id="unidad" placeholder="(m, ud, etc.)" required>
+      </div>
+
+      <div class="form-grupo">
+        <label for="stock">Stock actual</label>
+        <input type="number" id="stock" step="0.01" required>
+      </div>
+
+      <div class="form-grupo">
+        <label for="stock_minimo">Stock mínimo</label>
+        <input type="number" id="stock_minimo" step="0.01">
+      </div>
+
+      <div class="form-grupo">
+        <label for="ubicacion">Ubicación</label>
+        <input type="text" id="ubicacion" placeholder="Opcional">
+      </div>
+
+      <div class="form-grupo">
+        <label for="proveedor">Proveedor</label>
+        <input type="text" id="proveedor" placeholder="Opcional">
+      </div>
+
+      <div class="modal-botones">
+        <button type="button" id="cancelar-modal" class="btn-cancelar">Cancelar</button>
+        <button type="submit" class="btn-guardar">Guardar</button>
+      </div>
+    </form>
   </div>
-  
+</div>
