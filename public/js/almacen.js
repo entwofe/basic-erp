@@ -46,7 +46,7 @@ window.inicializarModuloAlmacen = () => {
         <td>${a.tipo}</td>
         <td>${a.unidad}</td>
         <td>${a.stock}</td>
-        <td>${a.precio_coste || ''}</td>
+        <td>${a.precio || ''}</td>
         <td>
           <button class="btn-editar" data-id="${a.id}">✏️</button>
           <button class="btn-eliminar" data-id="${a.id}">🗑️</button>
@@ -55,7 +55,7 @@ window.inicializarModuloAlmacen = () => {
       fila.style.cursor = 'pointer';
       fila.addEventListener('mouseenter', () => fila.style.backgroundColor = '#f0f9ff');
       fila.addEventListener('mouseleave', () => fila.style.backgroundColor = '');
-
+  
       fila.addEventListener('dblclick', () => {
         const id = a.id;
         const modulo = `fichaArticulo-${id}`;
@@ -67,10 +67,11 @@ window.inicializarModuloAlmacen = () => {
           params: { id }
         });
       });
-
+  
       tabla.appendChild(fila);
     });
   };
+  
 
   const configurarEventosAcciones = (articulos) => {
     document.querySelectorAll('.btn-editar').forEach(boton => {
@@ -114,10 +115,15 @@ window.inicializarModuloAlmacen = () => {
     localStorage.setItem('almacen_busqueda', texto);
 
     const filtrados = articulosOriginales.filter(a => {
-      const coincideTipo = !tipo || a.tipo.toLowerCase() === tipo;
-      const coincideTexto = a.nombre.toLowerCase().includes(texto);
+      const nombre = (a.nombre || '').toLowerCase();
+      const tipoArticulo = (a.tipo || '').toLowerCase();
+      
+      const coincideTipo = !tipo || tipoArticulo === tipo;
+      const coincideTexto = nombre.includes(texto);
+    
       return coincideTipo && coincideTexto;
     });
+    
 
     paginaActual = 1;
     mostrarPaginados(filtrados);

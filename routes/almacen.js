@@ -4,9 +4,26 @@ const express = require('express');
 const db = require('../db/db');
 const QRCode = require('qrcode');
 const { tienePermiso } = require('../middlewares/authMiddleware');
-const { io } = require('../server'); // 💡 Importamos io
+const { io } = require('../server');
 
 const router = express.Router();
+
+/**
+ * Obtener todos los artículos
+ */
+router.get('/', tienePermiso('almacen', 'leer'), async (req, res) => {
+  try {
+    const [articulos] = await db.query(`
+      SELECT id, nombre, tipo, unidad, stock, precio
+      FROM articulos
+      ORDER BY nombre ASC
+    `);
+    res.json(articulos);
+  } catch (error) {
+    console.error('❌ Error al obtener artículos:', error);
+    res.status(500).json({ error: 'Error al obtener artículos' });
+  }
+});
 
 /**
  * Obtener un artículo por ID
@@ -22,21 +39,8 @@ router.get('/:id', tienePermiso('almacen', 'leer'), async (req, res) => {
 
     res.json(resultados[0]);
   } catch (error) {
-    console.error('Error al obtener artículo:', error);
+    console.error('❌ Error al obtener artículo:', error);
     res.status(500).json({ error: 'Error al obtener artículo' });
-  }
-});
-
-/**
- * Obtener todos los artículos
- */
-router.get('/', tienePermiso('almacen', 'leer'), async (req, res) => {
-  try {
-    const [articulos] = await db.query('SELECT * FROM articulos ORDER BY nombre ASC');
-    res.json(articulos);
-  } catch (error) {
-    console.error('Error al obtener artículos:', error);
-    res.status(500).json({ error: 'Error al obtener artículos' });
   }
 });
 
@@ -66,7 +70,7 @@ router.post('/', tienePermiso('almacen', 'crear'), async (req, res) => {
 
     res.status(201).json({ mensaje: 'Artículo creado correctamente', id });
   } catch (error) {
-    console.error('Error al crear artículo:', error);
+    console.error('❌ Error al crear artículo:', error);
     res.status(500).json({ error: 'Error al crear artículo' });
   }
 });
@@ -90,7 +94,7 @@ router.put('/:id', tienePermiso('almacen', 'editar'), async (req, res) => {
 
     res.json({ mensaje: 'Artículo actualizado correctamente' });
   } catch (error) {
-    console.error('Error al actualizar artículo:', error);
+    console.error('❌ Error al actualizar artículo:', error);
     res.status(500).json({ error: 'Error al actualizar artículo' });
   }
 });
@@ -108,7 +112,7 @@ router.delete('/:id', tienePermiso('almacen', 'eliminar'), async (req, res) => {
 
     res.json({ mensaje: 'Artículo eliminado correctamente' });
   } catch (error) {
-    console.error('Error al eliminar artículo:', error);
+    console.error('❌ Error al eliminar artículo:', error);
     res.status(500).json({ error: 'Error al eliminar artículo' });
   }
 });
